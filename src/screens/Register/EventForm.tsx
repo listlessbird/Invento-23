@@ -156,9 +156,9 @@ export function EventForm() {
                         </Accordion>
                     </ItemGroup>
                 </div> */}
-                <button className="btn btn--save text-white ff-serif">
+                {/* <button className="btn btn--save text-white ff-serif">
                     Save Changes
-                </button>
+                </button> */}
             </div>
         </>
     )

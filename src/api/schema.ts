@@ -1,5 +1,18 @@
 import { z } from 'zod'
 
+export interface Order {
+    id: string
+    currency: string
+    amt: number
+    createdAt: number
+    attemptId: string
+}
+
+export interface VerifyOrder {
+    success: boolean
+    msg: string
+}
+
 const baseSchema = z.object({
     success: z.boolean(),
 })

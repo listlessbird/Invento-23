@@ -12,3 +12,4 @@ export const BACKGROUNDS = {
 }
 
 export const API_URI = import.meta.env.VITE_API_BASE_URL
+export const RZ_SCRIPT = 'https://checkout.razorpay.com/v1/checkout.js'

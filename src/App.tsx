@@ -77,6 +77,12 @@ const LazyFormLayout = lazy(() =>
 
 const LazyRegister = lazy(() => import('./screens/Register'))
 
+const LazyCheckout = lazy(() =>
+    import('./screens/Checkout/').then((m) => {
+        return { default: m.CheckoutLayout }
+    }),
+)
+
 const routes = createBrowserRouter([
     {
         path: '*',
@@ -156,6 +162,10 @@ const routes = createBrowserRouter([
                 element: <LazyCA />,
             },
         ],
+    },
+    {
+        path: '/checkout',
+        element: <LazyCheckout />,
     },
 ])
 

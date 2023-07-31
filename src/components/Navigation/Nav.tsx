@@ -28,7 +28,7 @@ export default function Nav({
     const { className, ...rest } = delegated
     return (
         <header
-            className={`${className} header--main bg-dark-purple flex`}
+            className={`${className ?? ''} header--main bg-dark-purple flex`}
             style={{ '--navbar-bg': background } as React.CSSProperties}
             data-theme={theme}
             {...rest}
