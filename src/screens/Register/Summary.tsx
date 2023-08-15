@@ -14,20 +14,26 @@ export function Summary() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
-            key={`wrapper-` + item.id}
+            key={`wrapper-` + item._id}
             transition={{ type: 'spring' }}
         >
             <ItemCard
-                key={item?.id}
-                title={item.title}
+                mode="show"
+                itemId={item._id}
+                group={item.participationType === 'group' ? true : false}
+                maxParticipants={
+                    item.participationType === 'group' ? item.members.length : 0
+                }
+                key={item?._id}
+                title={item.name}
                 date={item.date}
-                fee={Number(item.fee)}
-                image={item.image}
+                fee={Number(item.regFee)}
+                image={item?.image || '/static/natya.jpg'}
                 actionType="nonTogglable"
-                action={() => removeItem(item.id)}
+                action={() => removeItem(item._id)}
                 selected={true}
                 onClick={() => {
-                    setSelectedindex(Number(item.id))
+                    setSelectedindex(Number(item._id))
                     // setisFilled((state) => !state)
                 }}
             />

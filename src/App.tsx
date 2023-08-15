@@ -1,17 +1,34 @@
+import 'react-toastify/dist/ReactToastify.min.css'
+
+import { Cloudinary } from '@cloudinary/url-gen'
 import { lazy, Suspense } from 'react'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
 
 import Loading from './components/Loading'
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            staleTime: 1000 * 60 * 5,
+            refetchOnWindowFocus: false,
+        },
+    },
+})
 
 const LazyHomeLayout = lazy(() =>
     import('./pages/Home/Layout').then((m) => {
         return { default: m.Layout }
     }),
 )
+
+export const cld = new Cloudinary({
+    cloud: {
+        cloudName: import.meta.env.VITE_CLOUD_NAME,
+    },
+})
 
 const LazyHome = lazy(() => import('./pages/Home'))
 
@@ -175,6 +192,7 @@ function App() {
             <QueryClientProvider client={queryClient}>
                 <RouterProvider router={routes} />
                 <ReactQueryDevtools initialIsOpen={false} />
+                <ToastContainer theme="dark" autoClose={1000} limit={1} />
             </QueryClientProvider>
         </Suspense>
     )

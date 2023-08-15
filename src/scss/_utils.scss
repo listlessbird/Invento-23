@@ -302,3 +302,11 @@
 .container {
     max-width: var(--max-width, 81rem);
 }
+
+.text-decoration-none {
+    text-decoration: none;
+}
+
+.light-scheme {
+    color-scheme: light;
+}

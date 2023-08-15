@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { MEventCard } from '../../components/Card'
 
 export default function Crowstealers() {
+    // todo: use actual svgs
     const emotes = ['🥁', '🎤', '🎙️', '🎵']
     const [emote, setEmote] = useState(0)
 
@@ -23,7 +24,6 @@ export default function Crowstealers() {
 
         const timeout = setTimeout(() => {
             setEmote((s) => (s === emotes.length - 1 ? 0 : s + 1))
-            console.log(`updated to ${emote}`, emotes[emote])
         }, 2000)
 
         return () => {
@@ -89,21 +89,21 @@ export default function Crowstealers() {
                 variants={container}
             >
                 <MEventCard
-                    date="June 24"
+                    date="TBA"
                     imgSrc="/static/landing/stock-ev.jpg"
                     title="the avial band"
                     color="hsl(56, 100%, 78%)"
                     variants={item}
                 />
                 <MEventCard
-                    date="June 24"
+                    date="TBA"
                     imgSrc="/static/landing/stock-ev.jpg"
                     title="benny dayal"
                     color="hsl(313, 88%, 53%)"
                     variants={item}
                 />
                 <MEventCard
-                    date="June 24"
+                    date="TBA"
                     imgSrc="/static/landing/stock-ev.jpg"
                     title="the nandi sisters"
                     color="hsl(186, 71%, 46%)"

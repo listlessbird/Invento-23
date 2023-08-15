@@ -1,22 +1,42 @@
 import { create, StoreApi } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 
+import { EventType } from '../api/schema'
 import { FormSchema } from '../screens/Register/schema'
 
 type FormData = FormSchema
 
-interface Item {
-    id: string
-    title: string
-    date: string
-    fee: string
+type ItemSingle = {
+    participationType: 'solo'
+}
+
+type Group = {
+    [key: string]: string
+}
+
+type ItemTeam = {
+    participationType: 'group'
+    members: Group[]
+}
+
+type ItemImage = {
     image: string
 }
+
+type Item = Pick<EventType, '_id' | 'name' | 'date' | 'regFee'> &
+    ItemImage &
+    (ItemSingle | ItemTeam)
 
 interface ItemStore {
     items: Item[]
     addItem: (item: Item) => void
-    removeItem: (id: Item[`id`]) => void
+    removeItem: (id: Item[`_id`]) => void
+}
+
+interface GroupStore {
+    groups: { [key: string extends keyof Item ? never : Item[`_id`]]: Group[] }
+    addMembers: (id: Item[`_id`], members: Group[]) => void
+    reset: () => void
 }
 
 interface DetailStore {
@@ -34,14 +54,14 @@ export const useStore = create<ItemStore>()(
                 items: [],
                 addItem: (item: Item) =>
                     set((state) => ({
-                        ...state,
+                        // ...state,
                         items: [...state.items, { ...item }],
                     })),
 
-                removeItem: (id: Item[`id`]) =>
+                removeItem: (id: Item[`_id`]) =>
                     set((state) => ({
                         ...state,
-                        items: state.items.filter((item) => item.id !== id),
+                        items: state.items.filter((item) => item._id !== id),
                     })),
             }),
             {
@@ -68,6 +88,23 @@ export const useDetailStore = create<DetailStore>()(
                     })),
             }),
             { name: 'formDetailStore' },
+        ),
+    ),
+)
+
+export const useGroupStore = create<GroupStore>()(
+    devtools(
+        persist(
+            (set) => ({
+                groups: {},
+                addMembers: (id: Item[`_id`], members: Group[]) =>
+                    set((state) => ({
+                        ...state,
+                        groups: { ...state.groups, [id]: members },
+                    })),
+                reset: () => set({ groups: {} }),
+            }),
+            { name: 'groupStore' },
         ),
     ),
 )
