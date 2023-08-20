@@ -1,6 +1,7 @@
 import 'react-toastify/dist/ReactToastify.min.css'
 
 import { Cloudinary } from '@cloudinary/url-gen'
+import { domAnimation, LazyMotion } from 'framer-motion'
 import { lazy, Suspense } from 'react'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
@@ -35,6 +36,12 @@ const LazyHome = lazy(() => import('./pages/Home'))
 const LazyNotFound = lazy(() =>
     import('./screens/NotFound').then((m) => {
         return { default: m.NotFound }
+    }),
+)
+
+const LazySoon = lazy(() =>
+    import('./screens/Soon').then((m) => {
+        return { default: m.Soon }
     }),
 )
 
@@ -142,24 +149,25 @@ const routes = createBrowserRouter([
     },
     {
         path: '/register',
-        element: <LazyFormLayout />,
-        children: [
-            {
-                index: true,
-                element: <LazyRegister />,
-            },
-        ],
+        element: <LazySoon />,
+        // element: <LazyFormLayout />,
+        // children: [
+        //     {
+        //         index: true,
+        //         element: <LazyRegister />,
+        //     },
+        // ],
     },
-    {
-        path: '/about',
-        element: <LazyAboutLayout />,
-        children: [
-            {
-                index: true,
-                element: <LazyAbout />,
-            },
-        ],
-    },
+    // {
+    //     path: '/about',
+    //     element: <LazyAboutLayout />,
+    //     children: [
+    //         {
+    //             index: true,
+    //             element: <LazyAbout />,
+    //         },
+    //     ],
+    // },
     {
         path: '/leaderboards',
         element: <LazyLeaderBoardLayout />,
@@ -190,7 +198,9 @@ function App() {
     return (
         <Suspense fallback={<Loading />}>
             <QueryClientProvider client={queryClient}>
-                <RouterProvider router={routes} />
+                <LazyMotion features={domAnimation} strict>
+                    <RouterProvider router={routes} />
+                </LazyMotion>
                 <ReactQueryDevtools initialIsOpen={false} />
                 <ToastContainer theme="dark" autoClose={1000} limit={1} />
             </QueryClientProvider>

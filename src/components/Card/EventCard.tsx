@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { CSSProperties, forwardRef } from 'react'
 
 import { ReactComponent as IconArrow } from '../../assets/svg/Arrow.svg'
@@ -17,6 +17,8 @@ export const EventCard = forwardRef<HTMLElement, ECardProps>(function Ecard(
 ) {
     const cardStyle = {
         '--card-color': color ?? '#126fd5',
+        '--stroke-color': color ?? '#126fd5',
+        '--stroke-width': '1.5px',
     } as CSSProperties
 
     return (
@@ -30,7 +32,10 @@ export const EventCard = forwardRef<HTMLElement, ECardProps>(function Ecard(
                     />
                 </div>
                 <div className="wrap-header">
-                    <h4 className="ff-gothic fw-400 uppercase" data-content={title}>
+                    <h4
+                        className="ff-gothic fw-400 uppercase stroked-text"
+                        data-content={title}
+                    >
                         {title}
                     </h4>
                 </div>
@@ -68,4 +73,4 @@ export const EventCard = forwardRef<HTMLElement, ECardProps>(function Ecard(
     )
 })
 
-export const MEventCard = motion(EventCard)
+export const MEventCard = m(EventCard)
