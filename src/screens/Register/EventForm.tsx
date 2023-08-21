@@ -112,9 +112,6 @@ export function EventForm() {
                             </div>
                         ),
                 )}
-                <button className="btn btn--save text-white ff-serif">
-                    Save Changes
-                </button> */}
             </div>
         </>
     )
