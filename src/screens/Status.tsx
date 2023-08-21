@@ -1,11 +1,17 @@
+import { useSearchParams } from 'react-router-dom'
+
 import { ReactComponent as InventoLogo } from '../assets/svg/invento__logo-outline-full.svg'
 import Button from '../components/Button'
 
 type Props = {
-    status: 'REDIRECT' | 'SUCCESS' | 'FAILURE'
+    status?: 'REDIRECT' | 'SUCCESS' | 'FAILURE'
 }
 
-export default function Status({ status }: Props) {
+export default function Status() {
+    const [searchParams] = useSearchParams()
+
+    const status = searchParams.get('state')
+
     const success = (
         <div className="status--success flow ff-serif">
             <h1 className="status__title ff-serif fw-400">Payment Successful</h1>
@@ -56,14 +62,13 @@ export default function Status({ status }: Props) {
             </p>
         </div>
     )
-
     return (
         <section className="status__main bg-white text-black side-padding grid">
             <div className="centeredContainer wrapper grid">
                 <InventoLogo className="status__logo" />
-                {status === 'SUCCESS' && success}
-                {status === 'FAILURE' && failure}
-                {status === 'REDIRECT' && redirect}
+                {status === 'success' && success}
+                {status === 'failure' && failure}
+                {status === 'redirect' && redirect}
             </div>
         </section>
     )
