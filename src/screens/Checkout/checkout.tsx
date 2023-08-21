@@ -1,25 +1,31 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router'
 
 import { Order, VerifyOrder } from '../../api/schema'
 import Button from '../../components/Button'
+import { ItemCard } from '../../components/Card'
 import { RZ_SCRIPT } from '../../constants'
 import { useExternalScript } from '../../hooks'
 import { useDetailStore, useStore } from '../../store'
 
 export function Checkout() {
-    const { items } = useStore((store) => store)
+    const navigate = useNavigate()
+    const { items, removeItem } = useStore((store) => store)
     const { personalDetails } = useDetailStore((store) => store)
     const [order, setOrder] = useState<Order>()
-    const [price, setPrice] = useState(() => {
-        return items.reduce((acc, item) => acc + Number(item.fee), 0)
+    const [price] = useState(() => {
+        return items.reduce((acc, item) => acc + Number(item.regFee), 0)
     })
+    const [selectedindex, setSelectedindex] = useState(0)
+
+    const { name, email, phone, college, referral = '' } = personalDetails
 
     const [paymentStatus, setPaymentStatus] = useState<
         'success' | 'failed' | 'pending' | 'none'
     >('none')
 
     const status = useExternalScript(RZ_SCRIPT, {
-        removeOnUnmount: true,
+        removeOnUnmount: false,
     })
 
     async function createOrder() {
@@ -106,15 +112,73 @@ export function Checkout() {
         })
         paymentObj.open()
     }
-
+    console.log(`Personal Details`, personalDetails)
     return (
-        <div className="mh-full bg-white text-black">
-            <h1>Checkout</h1>
-            <h2>Payment Status: {paymentStatus}</h2>
-
-            <Button type="button" onClick={handleRz}>
-                Pay {price}
-            </Button>
+        <div className="formParentWrap centeredContainer flow side-padding light-scheme mh-full checkout_main">
+            <div>
+                <h2 className="FormHeading text-black fw-400 ff-serif">
+                    Personal Information
+                </h2>
+                <div className="FormWrap bg-white checkout__personalWrap text-black ff-serif flow">
+                    <h3 className="capitalize">{name}</h3>
+                    <p>{college}</p>
+                    <p>{email}</p>
+                    <p>{phone}</p>
+                    {referral && <p>Referall Id: {referral}</p>}
+                </div>
+            </div>
+            <div className="">
+                <h3 className="text-black ff-serif fw-400">Selected events</h3>
+            </div>
+            <div className="form__eventsWrap bg-white flow grid">
+                {items.map((item) => (
+                    <ItemCard
+                        mode="show"
+                        itemId={item._id}
+                        group={item.participationType === 'group' ? true : false}
+                        maxParticipants={
+                            item.participationType === 'group' ? item.members.length : 0
+                        }
+                        key={item?._id}
+                        title={item.name}
+                        date={item.date}
+                        fee={Number(item.regFee)}
+                        image={item?.image || '/static/natya.jpg'}
+                        actionType="nonTogglable"
+                        action={() => removeItem(item._id)}
+                        selected={true}
+                        onClick={() => {
+                            setSelectedindex(Number(item._id))
+                            // setisFilled((state) => !state)
+                        }}
+                    />
+                ))}
+                <div className="text-black ff-serif">
+                    <p>Total: &#8377;{price}</p>
+                </div>
+                <div className="checkout_btn_wrap flex flex-col">
+                    <Button
+                        type="button"
+                        className="btn btn--go-back ff-serif"
+                        onClick={() => navigate(-1)}
+                        style={{
+                            textTransform: 'capitalize',
+                        }}
+                    >
+                        Go Back
+                    </Button>
+                    <Button
+                        type="button"
+                        className="btn btn--checkout ff-serif"
+                        style={{
+                            textTransform: 'none',
+                        }}
+                        onClick={handleRz}
+                    >
+                        Proceed to payment
+                    </Button>
+                </div>
+            </div>
         </div>
     )
 }
