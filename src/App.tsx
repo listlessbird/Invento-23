@@ -107,6 +107,9 @@ const LazyCheckout = lazy(() =>
     }),
 )
 
+const LazyStatusLayout = lazy(() => import('./Layouts/StatusLayout'))
+const LazyStatus = lazy(() => import('./screens/Status'))
+
 const routes = createBrowserRouter([
     {
         path: '*',
@@ -149,14 +152,14 @@ const routes = createBrowserRouter([
     },
     {
         path: '/register',
-        element: <LazySoon />,
-        // element: <LazyFormLayout />,
-        // children: [
-        //     {
-        //         index: true,
-        //         element: <LazyRegister />,
-        //     },
-        // ],
+        // element: <LazySoon />,
+        element: <LazyFormLayout />,
+        children: [
+            {
+                index: true,
+                element: <LazyRegister />,
+            },
+        ],
     },
     // {
     //     path: '/about',
@@ -191,6 +194,16 @@ const routes = createBrowserRouter([
     {
         path: '/checkout',
         element: <LazyCheckout />,
+    },
+    {
+        path: '/status',
+        element: <LazyStatusLayout />,
+        children: [
+            {
+                index: true,
+                element: <LazyStatus />,
+            },
+        ],
     },
 ])
 

@@ -1,3 +1,4 @@
+import { HTMLMotionProps, m } from 'framer-motion'
 import React, { forwardRef, useRef } from 'react'
 import { Link } from 'react-router-dom'
 
@@ -18,11 +19,11 @@ type IButtonProps = {
       }
     | ({
           type: 'externalUrl'
-      } & React.HTMLProps<HTMLAnchorElement>)
+      } & HTMLMotionProps<'a'>)
     | ({
           type: 'button' | 'submit'
           onClick: (event: React.MouseEvent<HTMLButtonElement>) => void
-      } & React.HTMLProps<HTMLButtonElement>)
+      } & HTMLMotionProps<'button'>)
 )
 
 // const Loader = () => <div className="Btn--loader"></div>
@@ -50,10 +51,12 @@ const Button = forwardRef<HTMLButtonElement, IButtonProps>(function Btn(
     switch (props.type) {
         case 'button':
             return (
-                <button
+                <m.button
                     {...props}
                     type={props.type}
                     ref={mergeRefs(btnRef, ref)}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                     // style={
                     //     showLoader ? { width: `${width}px`, height: `${height}px` } : {}
                     // }
@@ -70,26 +73,34 @@ const Button = forwardRef<HTMLButtonElement, IButtonProps>(function Btn(
                         </animated.div>
                     )} */}
                     {children}
-                </button>
+                </m.button>
             )
         case 'submit':
             return (
-                <button {...props} type={props.type} ref={mergeRefs(btnRef, ref)}>
+                <m.button
+                    {...props}
+                    type={props.type}
+                    ref={mergeRefs(btnRef, ref)}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                >
                     {children}
-                </button>
+                </m.button>
             )
         case 'externalUrl':
             return (
-                <a {...props} target="_blank" rel="noopener noreferrer">
+                <m.a {...props} target="_blank" rel="noopener noreferrer">
                     {children}
-                </a>
+                </m.a>
             )
         case 'internalUrl': {
             const { classNames, ...others } = props
             return (
-                <Link {...others} className={classNames}>
-                    {children}
-                </Link>
+                <m.div whileTap={{ scale: 0.95 }} whileHover={{ scale: 1.05 }}>
+                    <Link {...others} className={classNames}>
+                        {children}
+                    </Link>
+                </m.div>
             )
         }
     }
